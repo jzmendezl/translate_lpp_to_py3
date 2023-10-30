@@ -1,0 +1,82 @@
+// ejemplo de condición doble usando 'sino si'
+
+registro estudiante
+	cadena [10] nombre
+	cadena [10] apellido
+	entero edad
+	caracter tipo_sangre
+	entero matricula
+	real promedio
+fin registro
+
+
+
+arreglo[10] de entero arreglo_enteros
+arreglo[5] de booleano arreglo_booleanos
+arreglo[2] de cadena[10] arreglo_cadenas
+
+
+arreglo[10,10] de entero arreglo_enteros2
+arreglo[5,5,5] de booleano arreglo_booleanos2
+
+entero n1, n2
+entero numero
+arreglo [2] de entero mi_arreglo
+cadena [10] nombre
+estudiante Juanito
+
+funcion exponenciacion(entero base,entero exponente): entero
+	inicio
+		retorne base^exponente
+	fin
+
+inicio
+
+    numero <- 5 + 2
+
+    Juanito.nombre <-"Juan"
+	Juanito.apellido<-(Juanito.nombre)+"Garcia"
+	Juanito.edad <- 19
+	Juanito.tipo_sangre<-'O'
+	Juanito.matricula<-6
+	Juanito.promedio<- 4.5
+
+	escriba "Datos del estudiante"
+	llamar nueva_linea
+	llamar nueva_linea
+	escriba "Nombre completo: ",Juanito.nombre,' ',Juanito.apellido
+	llamar nueva_linea
+	escriba "Edad: ",Juanito.edad
+	llamar nueva_linea
+	escriba "Tipo de sangre: ",Juanito.tipo_sangre
+	llamar nueva_linea
+	escriba "Matricula: ",Juanito.matricula
+	llamar nueva_linea
+	escriba "Promedio: ",Juanito.promedio
+
+	resultado <- exponenciacion(2,5)
+	escriba "El resultado de la operacion es: ",resultado
+
+	arreglo_enteros[0]<-2
+	llamar nueva_linea
+	escriba arreglo_enteros[0]
+
+	arreglo_booleanos[4]<-verdadero
+	llamar nueva_linea
+	escriba arreglo_booleanos[4]
+
+	arreglo_cadenas[1]<-"Hola"
+	llamar nueva_linea
+	escriba arreglo_cadenas[1]
+
+	arreglo_enteros2[0,2] <- 5
+    arreglo_booleanos2[0,0,1] <- verdadero
+    escriba arreglo_enteros2[0,2], arreglo_booleanos2[0,0,1]
+
+    lea n1, n2
+    escriba n1, (" y "), n2, ": fueron los números seleccionados :"+")"
+
+    si 2<4 entonces
+		escriba "2 es menor que 4"
+	fin si
+fin
