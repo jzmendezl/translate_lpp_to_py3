@@ -8,7 +8,6 @@ class Translate(LPPListener):
 
   def remove_lastChild(self, ctx):
     return ctx.removeLastChild()
-
   def convert_vars(self, string):
     # list_str = re.findall(r'([\w+][\w+]*)\[(\d+(?:,\d+)*)\]', string)
     # print('list_str', list_str)
@@ -32,7 +31,6 @@ class Translate(LPPListener):
 
       string = re.sub(r'\[([^\]]*)\]', output, string)
       return string
-
   def crear_matriz(self, *dimensiones):
     if len(dimensiones) < 2:
       raise ValueError("La matriz debe tener al menos dos dimensiones.")
@@ -43,6 +41,193 @@ class Translate(LPPListener):
       matriz = [[[matriz[i] for _ in range(dim)] for i in range(len(matriz))] for _ in range(dimensiones[-1])]
 
     return matriz
+
+  def enterPrograma(self, ctx:LPPParser.ProgramaContext):
+    print(f"import sys")
+    print(f"import math")
+    print(f"import random")
+    print(f"import numpy as np")
+    print(f"\n\n")
+
+  def enterDeclaracionesTipos(self, ctx:LPPParser.DeclaracionesTiposContext):
+    if ctx.declaracionRegistro() is not None:
+      print(self.enterDeclaracionRegistro(ctx.getChild(0)))
+    else:
+      return
+
+  def enterDeclaracionRegistro(self, ctx:LPPParser.DeclaracionRegistroContext):
+    to_print = ''
+    to_print += f"class {ctx.getChild(1).getText()}:"
+    to_print += f"\n\tdef __init__(self):"
+    # print(f"class {ctx.getChild(1).getText()}:")
+    # print(f"\tdef __init__(self):")
+    num_children = ctx.getChild(2).getChildCount()
+    for i in range(0, num_children-1):
+      if self.enterTipo(ctx.getChild(2).getChild(i).getChild(0)) == "list":
+        to_print += f"\n\t\tself.{ctx.getChild(2).getChild(i).getChild(1).getText()} = []"
+        # print(f"\t\tself.{ctx.getChild(3).getChild(i).getChild(1).getText()} = []")
+      elif self.enterTipo(ctx.getChild(2).getChild(i).getChild(0)) == "str":
+        to_print += f"\n\t\tself.{ctx.getChild(2).getChild(i).getChild(1).getText()} = ''"
+        # print(f"\t\tself.{ctx.getChild(3).getChild(i).getChild(1).getText()} = ''")
+      elif self.enterTipo(ctx.getChild(2).getChild(i).getChild(0)) == "int":
+        to_print += f"\n\t\tself.{ctx.getChild(2).getChild(i).getChild(1).getText()} = 0"
+        # print(f"\t\tself.{ctx.getChild(3).getChild(i).getChild(1).getText()} = 0")
+      elif self.enterTipo(ctx.getChild(2).getChild(i).getChild(0)) == "float":
+        to_print += f"\n\t\tself.{ctx.getChild(2).getChild(i).getChild(1).getText()} = 0.0"
+        # print(f"\t\tself.{ctx.getChild(3).getChild(i).getChild(1).getText()} = 0.0")
+      elif self.enterTipo(ctx.getChild(2).getChild(i).getChild(0)) == "bool":
+        to_print += f"\n\t\tself.{ctx.getChild(2).getChild(i).getChild(1).getText()} = False"
+        # print(f"\t\tself.{ctx.getChild(3).getChild(i).getChild(1).getText()} = False")
+      elif self.enterTipo(ctx.getChild(2).getChild(i).getChild(0)) == "char":
+        to_print += f"\n\t\tself.{ctx.getChild(2).getChild(i).getChild(1).getText()} = ''"
+        # print(f"\t\tself.{ctx.getChild(3).getChild(i).getChild(1).getText()} = ''")
+    to_print += f"\n\n"
+    return to_print
+
+  # def enterDeclaracionesVariables(self, ctx:LPPParser.DeclaracionesVariablesContext):
+  #   # print('DV', ctx.getChild(0).getText())
+  #   if ctx.declaracionVariables() is not None:
+  #     # print('DV', self.enterDeclaracionVariable(ctx.getChild(0)))
+  #     return self.enterDeclaracionVariables(ctx.getChild(0))
+    # else:
+    #   return
+  def enterDeclaracionVariables(self, ctx:LPPParser.DeclaracionesVariablesContext):
+    # print(f"len_arr {len_arr}")
+    # for child in ctx.getChildren():
+    # if self.enterTipo(ctx.getChild(0)) == "list":
+    #   # print(ctx.getChild(0).getChild(2).getText())
+    #   len_arr = ctx.getChild(0).getChild(2).getText()
+    #   len_arr = len_arr.split(',')
+    #   if len(len_arr) == 1:
+    #     print(f"{ctx.getChild(1).getText()} = [0] * {len_arr[0]}\n")
+    #   else:
+    #     dim = '[0],'
+    #     dimensiones = len_arr
+    #     # for i in range(0, len(len_arr)):
+    #     #   print(f"{ctx.getChild(1).getText()} = [{(i + 1) * dim}] * {len_arr[0]}\n")
+    #     matriz = f"[[[0 for _ in range({dimensiones[-1]})] for _ in range({dimensiones[-2]})]]"
+    #     print(f"{ctx.getChild(1).getText()} = {matriz}\n")
+    #
+    # elif self.enterTipo(ctx.getChild(0)) == "ID":
+    #   print(f"{ctx.getChild(1).getText()} = {ctx.getChild(0).getText()}()\n")
+    if self.enterTipo(ctx.getChild(0)) == 'list':
+      len_arr = ctx.getChild(0).getChild(2).getText()
+      # print('len_arr', len_arr)
+      list_len_arr = len_arr.split(',')
+      # print('list_len_arr', len(list_len_arr))
+      # print(ctx.getChild(1).getText())
+      if len(list_len_arr) == 1:
+        print(f"{ctx.getChild(1).getText()} = np.empty({list_len_arr[0]})\n")
+      else:
+        print(f"{ctx.getChild(1).getText()} = np.empty(({len_arr}))\n")
+    elif self.enterTipo(ctx.getChild(0)) == "ID":
+      print(f"{ctx.getChild(1).getText()} = {ctx.getChild(0).getText()}()\n")
+
+  def enterDeclaracionesSubprogramas(self, ctx:LPPParser.DeclaracionesSubprogramasContext):
+    if ctx.declaracionFuncion() is not None:
+      # print('DS', self.enterDeclaracionFuncion(ctx.getChild(0)))
+      print(self.enterDeclaracionFuncion(ctx.getChild(0)))
+    elif ctx.declaracionProcedimiento() is not None:
+      # print('DS', self.enterDeclaracionProcedimiento(ctx.getChild(0)))
+      print(self.enterDeclaracionProcedimiento(ctx.getChild(0)))
+    else:
+      return
+
+  def enterDeclaracionFuncion(self, ctx:LPPParser.DeclaracionFuncionContext):
+    params = []
+    to_print = ''
+    name_fun = ''
+    dv = ''
+    snts = ''
+    # print('ESTE ',ctx.declaracionesVariables().getChildCount() > 0)
+    if ctx.parametros() is not None:
+      name_fun += f"{ctx.getChild(1).getText()}"
+      for i in range(0, ctx.getChild(3).getChildCount()):
+        if i % 2 == 0:
+          params.append(f"{self.enterParametro(ctx.getChild(3).getChild(i))}")
+      params = ', '.join(params)
+      if ctx.declaracionesVariables() is not None and ctx.declaracionesVariables().getChildCount() > 0:
+        dv += self.enterDeclaracionesVariables(ctx.getChild(7))
+      elif ctx.sentenciasSubprograma() is not None:
+        snts += self.enterSentenciasSubprograma(ctx.getChild(8))
+    else:
+      name_fun += f"{ctx.getChild(1).getText()}"
+      if ctx.declaracionesVariables() is not None and ctx.declaracionesVariables().getChildCount() > 0:
+        dv += self.enterDeclaracionesVariables(ctx.getChild(4))
+      elif ctx.sentenciasSubprograma() is not None:
+        snts += self.enterSentenciasSubprograma(ctx.getChild(5))
+    to_print += f"def {name_fun}({params}):"
+    to_print += f"\n\t{dv}"
+    to_print += f"\n\t{snts}"
+    to_print += f"\n\n"
+    return to_print
+    #     # to_print += f"def {ctx.getChild(1).getText()}({params}):"
+    #     # expr = self.enterSentenciasSubprograma(ctx.getChild(8))
+    #     # print(f"\t{expr}")
+    #     print(f"\treturn {expr}")
+    #     print('\n')
+    # else:
+    #   name_fun += f"{ctx.getChild(1).getText()}"
+    #   print(f"def {ctx.getChild(1).getText()}():")
+    #   expr = self.enterSentenciasSubprograma(ctx.getChild(5))
+    #   # print(f"\t{expr}")
+    #   print(f"\t return {expr}")
+    #   print('\n')
+    #
+    # to_print += f"def {ctx.getChild(1).getText()}({params}):"
+
+  def enterSentenciasSubprograma(self, ctx:LPPParser.SentenciasSubprogramaContext):
+    if ctx.sentencias() is not None:
+      return self.enterSentencias(ctx.getChild(1))
+    else:
+      return
+
+  def enterSentencias(self, ctx:LPPParser.SentenciasContext):
+    if ctx.sentencia() is not None:
+      return self.enterSentencia(ctx.getChild(0))
+
+
+  def enterSentencia(self, ctx:LPPParser.SentenciaContext):
+    # print('SENTENCIA', ctx.getText())
+    if ctx.escriba() is not None:
+      print(self.enterEscriba(ctx.getChild(0)))
+      # return (self.enterEscriba(ctx.getChild(0)))
+    elif ctx.lea() is not None:
+      return (self.enterLea(ctx.getChild(0)))
+    elif ctx.asignar() is not None:
+      print(self.enterAsignar(ctx.getChild(0)))
+    elif ctx.llamar() is not None:
+      return (self.enterLlamar(ctx.getChild(0)))
+    elif ctx.si() is not None:
+      return (self.enterSi(ctx.getChild(0)))
+    elif ctx.caso() is not None:
+      return (self.enterCaso(ctx.getChild(0)))
+    elif ctx.mientras() is not None:
+      return (self.enterMientras(ctx.getChild(0)))
+    elif ctx.para() is not None:
+      return (self.enterPara(ctx.getChild(0)))
+    elif ctx.repita() is not None:
+      return (self.enterRepita(ctx.getChild(0)))
+    elif ctx.retorne() is not None:
+      return self.enterRetorne(ctx.getChild(0))
+    # if ctx.getChild(0).getChild(0).getText() == "retorne":
+    #   return self.enterRetorne(ctx.getChild(0))
+    # elif ctx.getChild(0).getChild(0).getText() == "si":
+    #   return self.enterSi(ctx.getChild(0))
+    # elif ctx.getChild(0).getChild(0).getText() == "mientras":
+    #   return self.enterMientras(ctx.getChild(0))
+    # elif ctx.getChild(0).getChild(0).getText() == "para":
+    #   return self.enterPara(ctx.getChild(0))
+    # elif ctx.getChild(0).getChild(0).getText() == "imprimir":
+    #   return self.enterImprimir(ctx.getChild(0))
+    # elif ctx.getChild(0).getChild(0).getText() == "leer":
+    #   return self.enterLeer(ctx.getChild(0))
+    # elif ctx.getChild(0).getChild(0).getText() == "asignar":
+    #   return self.enterAsignar(ctx.getChild(0))
+    # elif ctx.getChild(0).getChild(0).getText() == "llamar":
+    #   return self.enterLlamar(ctx.getChild(0))
+
+
   def enterTipo(self, ctx:LPPParser.TipoContext):
     if ctx.ENTERO() != None:
       return 'int'
@@ -119,7 +304,6 @@ class Translate(LPPListener):
   #       print(f"{ctx.getChild(0).getText()} = {ctx.getChild(2).getText()}\n")
   #   else:
   #     print(f"{ctx.getChild(0).getText()} = {ctx.getChild(2).getText()}\n")
-
   def enterAsignar(self, ctx:LPPParser.AsignarContext):
     lado_izq = self.enterExpr(ctx.getChild(0))
     # print('lado_izq', lado_izq)
@@ -129,67 +313,13 @@ class Translate(LPPListener):
     lado_der = ctx.getChild(2).getText()
     return f"{lado_izq} = {lado_der}"
 
-  def enterDeclaracionVariables(self, ctx:LPPParser.DeclaracionesVariablesContext):
-    # print(f"len_arr {len_arr}")
-    if self.enterTipo(ctx.getChild(0)) == "list":
-      # print(ctx.getChild(0).getChild(2).getText())
-      len_arr = ctx.getChild(0).getChild(2).getText()
-      len_arr = len_arr.split(',')
-      if len(len_arr) == 1:
-        print(f"{ctx.getChild(1).getText()} = [0] * {len_arr[0]}\n")
-      else:
-        dim = '[0],'
-        dimensiones = len_arr
-        # for i in range(0, len(len_arr)):
-        #   print(f"{ctx.getChild(1).getText()} = [{(i + 1) * dim}] * {len_arr[0]}\n")
-        matriz = f"[[[0 for _ in range({dimensiones[-1]})] for _ in range({dimensiones[-2]})]]"
-        print(f"{ctx.getChild(1).getText()} = {matriz}\n")
-
-    elif self.enterTipo(ctx.getChild(0)) == "ID":
-      print(f"{ctx.getChild(1).getText()} = {ctx.getChild(0).getText()}()\n")
-
-
-  def enterDeclaracionRegistro(self, ctx:LPPParser.DeclaracionRegistroContext):
-    print(f"class {ctx.getChild(1).getText()}:")
-    print(f"\tdef __init__(self):")
-    num_children = ctx.getChild(3).getChildCount()
-    for i in range(0, num_children-1):
-      self.remove_lastChild(ctx.getChild(3).getChild(i))
-      if self.enterTipo(ctx.getChild(3).getChild(i).getChild(0)) == "list":
-        print(f"\t\tself.{ctx.getChild(3).getChild(i).getChild(1).getText()} = []")
-      elif self.enterTipo(ctx.getChild(3).getChild(i).getChild(0)) == "str":
-        print(f"\t\tself.{ctx.getChild(3).getChild(i).getChild(1).getText()} = ''")
-      elif self.enterTipo(ctx.getChild(3).getChild(i).getChild(0)) == "int":
-        print(f"\t\tself.{ctx.getChild(3).getChild(i).getChild(1).getText()} = 0")
-      elif self.enterTipo(ctx.getChild(3).getChild(i).getChild(0)) == "float":
-        print(f"\t\tself.{ctx.getChild(3).getChild(i).getChild(1).getText()} = 0.0")
-      elif self.enterTipo(ctx.getChild(3).getChild(i).getChild(0)) == "bool":
-        print(f"\t\tself.{ctx.getChild(3).getChild(i).getChild(1).getText()} = False")
-      elif self.enterTipo(ctx.getChild(3).getChild(i).getChild(0)) == "char":
-        print(f"\t\tself.{ctx.getChild(3).getChild(i).getChild(1).getText()} = ''")
-    print('\n')
 
   def enterParametro(self, ctx:LPPParser.ParametroContext):
-    # print(f"{ctx.getChild(0).getText()} {ctx.getChild(1).getText()}")
+    # print(f"Ret {ctx.getChild(1).getText()}")
     return ctx.getChild(1).getText()
 
-  def enterDeclaracionFuncion(self, ctx:LPPParser.DeclaracionFuncionContext):
-    params = []
-
-    for i in range(0, ctx.getChild(3).getChildCount()):
-      if i % 2 == 0:
-        params.append(f"{self.enterParametro(ctx.getChild(3).getChild(i))}")
-    params = ', '.join(params)
-    print(f"def {ctx.getChild(1).getText()}({params}):")
-    expr = self.enterSentencia(ctx.getChild(9).getChild(2).getChild(0))
-    # print(f"\t{expr}")
-    print(f"\t return {expr}")
-    print('\n')
-
   def enterRetorne(self, ctx:LPPParser.RetorneContext):
-    expr = self.enterExpr(ctx.getChild(1))
-    # print(f"return {expr}")
-    return expr
+    return f"return {self.enterExpr(ctx.getChild(1))}"
 
   # def enterSentenciasPrograma(self, ctx:LPPParser.SentenciasProgramaContext):
   #   if ctx.sentencias() is not None:
@@ -201,49 +331,8 @@ class Translate(LPPListener):
   #     return self.enterSentencia(ctx.getChild(0))
   #   # for i in range(0, ctx.getChildCount()):
   #   #   self.enterSentencia(ctx.getChild(i))
-  def enterSentencia(self, ctx:LPPParser.SentenciaContext):
-    if ctx.escriba() is not None:
-      print(self.enterEscriba(ctx.getChild(0)))
-      # return (self.enterEscriba(ctx.getChild(0)))
-    elif ctx.lea() is not None:
-      return (self.enterLea(ctx.getChild(0)))
-    elif ctx.asignar() is not None:
-      print(self.enterAsignar(ctx.getChild(0)))
-    elif ctx.llamar() is not None:
-      return (self.enterLlamar(ctx.getChild(0)))
-    elif ctx.si() is not None:
-      return (self.enterSi(ctx.getChild(0)))
-    elif ctx.caso() is not None:
-      return (self.enterCaso(ctx.getChild(0)))
-    elif ctx.mientras() is not None:
-      return (self.enterMientras(ctx.getChild(0)))
-    elif ctx.para() is not None:
-      return (self.enterPara(ctx.getChild(0)))
-    elif ctx.repita() is not None:
-      return (self.enterRepita(ctx.getChild(0)))
-    elif ctx.retorne() is not None:
-      return (self.enterRetorne(ctx.getChild(0)))
-    # if ctx.getChild(0).getChild(0).getText() == "retorne":
-    #   return self.enterRetorne(ctx.getChild(0))
-    # elif ctx.getChild(0).getChild(0).getText() == "si":
-    #   return self.enterSi(ctx.getChild(0))
-    # elif ctx.getChild(0).getChild(0).getText() == "mientras":
-    #   return self.enterMientras(ctx.getChild(0))
-    # elif ctx.getChild(0).getChild(0).getText() == "para":
-    #   return self.enterPara(ctx.getChild(0))
-    # elif ctx.getChild(0).getChild(0).getText() == "imprimir":
-    #   return self.enterImprimir(ctx.getChild(0))
-    # elif ctx.getChild(0).getChild(0).getText() == "leer":
-    #   return self.enterLeer(ctx.getChild(0))
-    # elif ctx.getChild(0).getChild(0).getText() == "asignar":
-    #   return self.enterAsignar(ctx.getChild(0))
-    # elif ctx.getChild(0).getChild(0).getText() == "llamar":
-    #   return self.enterLlamar(ctx.getChild(0))
 
   def enterExpr(self, ctx:LPPParser.ExprContext):
-
-    # print('ctx', ctx.)
-
     if ctx.ID() is not None:
       # print('ID', ctx.getText(), ctx.ID().getText())
       return ctx.getText()
@@ -317,9 +406,7 @@ class Translate(LPPListener):
       list_expr.append(self.enterExpr(expr))
     return list_expr
   def enterLlamar(self, ctx:LPPParser.LlamarContext):
-    if ctx.NL() is not None:
-      return
-    elif ctx.ID() is not None:
+    if ctx.ID() is not None:
       print(f"{ctx.getChild(0).getText()}({ctx.getChild(2).getText()})")
 
   def enterLiteral(self, ctx:LPPParser.LiteralContext):
@@ -350,17 +437,31 @@ class Translate(LPPListener):
 
   def enterSi(self, ctx:LPPParser.SiContext):
     print(f"{ctx.getChildCount()}")
+    to_print = ''
+    snt_if = ''
+    snt_else = ''
+    snt_elif = ''
+
     if ctx.SI() is not None:
       print(f"if {self.enterExpr(ctx.getChild(1))}:")
-      print(f"\t{self.enterSentencias(ctx.getChild(4))}")
-      if ctx.getChildCount() == 9:
-        print(f"else:")
-        self.enterSentencia(ctx.getChild(5))
-      elif ctx.getChildCount() > 9:
-        print(f"else if {self.enterExpr(ctx.getChild(7))}:")
-        self.enterSentencia(ctx.getChild(8))
-        print(f"else:")
-        self.enterSentencia(ctx.getChild(9))
+      # print(f"\t{self.enterSentencias(ctx.getChild(3))}")
+      snt_if += self.enterExpr(ctx.getChild(1))
+      to_print += f"if {snt_if}:"
 
+    elif ctx.sino() is not None:
+      snt_else += self.enterSino(ctx.getChild(4))
+      to_print += f"{snt_else}"
 
+    return to_print
 
+  def enterSino(self, ctx:LPPParser.SinoContext):
+    snt_sino = ''
+    exp_sino_si = ''
+    snt_sino_si = ''
+    if ctx.SINO() is not None:
+      snt_sino += self.enterSentencias(ctx.getChild(1))
+      return f"else:\n\t{snt_sino}"
+    elif ctx.si() is not None:
+      exp_sino_si += self.enterExpr(ctx.getChild(1))
+      snt_sino_si += self.enterSentencias(ctx.getChild(3))
+      return f"elif {exp_sino_si}:\n\t{snt_sino_si}"

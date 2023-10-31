@@ -2,7 +2,7 @@
 grammar LPP;
 
 programa
-    : NL* declaracionesTipos declaracionesVariables declaracionesSubprogramas sentenciasPrograma
+    : declaracionesTipos declaracionesVariables declaracionesSubprogramas sentenciasPrograma
     ;
 
 declaracionesTipos
@@ -10,11 +10,11 @@ declaracionesTipos
     ;
 
 declaracionRegistro
-    : REGISTRO ID NL+ declaracionesVariables FIN REGISTRO NL+
+    : REGISTRO ID declaracionesVariables FIN REGISTRO
     ;
 
 declaracionTipo
-    : TIPO ID ES tipo NL+
+    : TIPO ID ES tipo
     ;
 
 declaracionesSubprogramas
@@ -22,11 +22,11 @@ declaracionesSubprogramas
     ;
 
 declaracionProcedimiento
-    : PROCEDIMIENTO ID ( '(' parametros ')' )? NL+ declaracionesVariables sentenciasSubprograma
+    : PROCEDIMIENTO ID ( '(' parametros ')' )? declaracionesVariables sentenciasSubprograma
     ;
 
 declaracionFuncion
-    : FUNCION ID ( '(' parametros ')' )? ':' tipo NL+ declaracionesVariables sentenciasSubprograma
+    : FUNCION ID ( '(' parametros ')' )? ':' tipo declaracionesVariables sentenciasSubprograma
     ;
 
 parametros
@@ -42,7 +42,7 @@ declaracionesVariables
     ;
 
 declaracionVariables
-    : tipo listaIDs NL+
+    : tipo listaIDs
     ;
 
 tipo
@@ -66,11 +66,11 @@ listaEnteros
     ;
 
 sentenciasSubprograma
-    : INICIO NL+ sentencias FIN NL+
+    : INICIO  sentencias FIN
     ;
 
 sentenciasPrograma
-    : INICIO NL+ sentencias FIN NL* EOF
+    : INICIO  sentencias FIN EOF
     ;
 
 sentencias
@@ -95,21 +95,21 @@ sentencia
     ;
 
 escriba
-    : ESCRIBA listaExpr NL+
+    : ESCRIBA listaExpr
     ;
 
 lea
-    : LEA listaExpr NL+
+    : LEA listaExpr
     ;
 
 asignar
-    : expr '<-' expr NL+
+    : expr '<-' expr
     ;
 
 llamar
-    : LLAMAR procedimientoLibreriaEstandar ( '(' listaExpr? ')' )? NL+
-    | LLAMAR funcionLibreriaEstandar ( '(' listaExpr? ')' )? NL+
-    | LLAMAR ID ( '(' listaExpr? ')' )? NL+
+    : LLAMAR procedimientoLibreriaEstandar ( '(' listaExpr? ')' )?
+    | LLAMAR funcionLibreriaEstandar ( '(' listaExpr? ')' )?
+    | LLAMAR ID ( '(' listaExpr? ')' )?
     ;
 
 procedimientoLibreriaEstandar
@@ -126,20 +126,20 @@ procedimientoLibreriaEstandar
     ;
 
 si
-    : SI expr NL* ENTONCES NL+ sentencias sino? FIN SI NL+
+    : SI expr ENTONCES  sentencias sino? FIN SI
     ;
 
 sino
     : SINO si
-    | SINO NL+ sentencias
+    | SINO sentencias
     ;
 
 caso
-    : CASO expr NL+ opcionCaso+ casoSino? FIN CASO NL+
+    : CASO expr opcionCaso+ casoSino? FIN CASO
     ;
 
 opcionCaso
-    : listaExprOpcion ':' NL+ sentencias
+    : listaExprOpcion ':' sentencias
     ;
 
 listaExprOpcion
@@ -156,27 +156,27 @@ rangoExpr
     ;
 
 casoSino
-    : SINO ':' NL* sentencias
+    : SINO ':'  sentencias
     ;
 
 mientras
-    : MIENTRAS expr NL* HAGA NL+ sentencias FIN MIENTRAS NL+
+    : MIENTRAS expr HAGA sentencias FIN MIENTRAS
     ;
 
 para
-    : PARA expr '<-' expr HASTA expr NL* HAGA NL+ sentencias FIN PARA NL+
+    : PARA expr '<-' expr HASTA expr  HAGA  sentencias FIN PARA
     ;
 
 repita
-    : REPITA NL+ sentencias HASTA expr NL+
+    : REPITA sentencias HASTA expr
     ;
 
 retorne
-    : RETORNE expr NL+
+    : RETORNE expr
     ;
 
 abrir
-    : ABRIR expr COMO expr PARA acceso NL+
+    : ABRIR expr COMO expr PARA acceso
     ;
 
 acceso
@@ -185,15 +185,15 @@ acceso
     ;
 
 cerrar
-    : CERRAR expr NL+
+    : CERRAR expr
     ;
 
 escribir
-    : ESCRIBIR expr ',' listaExpr NL+
+    : ESCRIBIR expr ',' listaExpr
     ;
 
 leer
-    : LEER expr ',' listaExpr NL+
+    : LEER expr ',' listaExpr
     ;
 
 listaExpr
@@ -372,7 +372,7 @@ fragment Z:('z'|'Z');
 ID : [a-zA-Z$_] [a-zA-Z0-9$_]* ;
 
 // NUEVA LINEA, ESPACIO BLANCO (WHITESPACE) Y COMENTARIOS
-NL : [\r\n]+ ;
+NL : [\r\n]+ -> skip ;
 WS : [ \t]+ -> skip ;
 COMENTARIO : '/*' .*? '*/' -> skip ;
 COMENTARIO_LINEA : '//' ~[\r\n]* -> skip ;

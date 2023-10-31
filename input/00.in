@@ -78,5 +78,7 @@ inicio
 
     si 2<4 entonces
 		escriba "2 es menor que 4"
+	sino
+	    escriba "mayor"
 	fin si
 fin
