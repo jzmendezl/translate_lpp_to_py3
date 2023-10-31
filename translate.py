@@ -465,3 +465,22 @@ class Translate(LPPListener):
       exp_sino_si += self.enterExpr(ctx.getChild(1))
       snt_sino_si += self.enterSentencias(ctx.getChild(3))
       return f"elif {exp_sino_si}:\n\t{snt_sino_si}"
+    
+  def enterMientras(self, ctx:LPPParser.MientrasContext):
+    if ctx.MIENTRAS() is not None:
+      print(f"while {self.enterExpr(ctx.getChild(1))}:")
+      self.enterSentencia(ctx.getChild(4))
+
+  def enterPara(self, ctx:LPPParser.ParaContext):
+    if ctx.PARA() is not None:
+      print(f"for {self.enterExpr(ctx.getChild(1))} in range({self.enterExpr(ctx.getChild(3))}, {self.enterExpr(ctx.getChild(5))}):")
+      self.enterSentencia(ctx.getChild(8))
+
+  def enterRepita(self, ctx:LPPParser.RepitaContext):
+    if ctx.REPITA() is not None:
+      print(f"while True:")
+      self.enterSentencia(ctx.getChild(1))
+      print(f"if {self.enterExpr(ctx.getChild(4))}:")
+      print(f"\tbreak")
+      print(f"else:")
+      self.enterSentencia(ctx.getChild(7))
