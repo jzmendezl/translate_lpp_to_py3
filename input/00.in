@@ -9,8 +9,6 @@ registro estudiante
 	real promedio
 fin registro
 
-
-
 arreglo[10] de entero arreglo_enteros
 arreglo[5] de booleano arreglo_booleanos
 arreglo[2] de cadena[10] arreglo_cadenas
@@ -70,6 +68,7 @@ inicio
 	escriba arreglo_cadenas[1]
 
 	arreglo_enteros2[0,2] <- 5
+	//arreglo_enteros2[0][2] = 5
     arreglo_booleanos2[0,0,1] <- verdadero
     escriba arreglo_enteros2[0,2], arreglo_booleanos2[0,0,1]
 

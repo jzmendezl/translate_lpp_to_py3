@@ -1,28 +1,52 @@
 import sys
+import numpy as np
 
-from antlr4 import *
+def main():
+	_ = 0
+	__ = 0
+	___ = 0
+	my_real = 0.0
+	_real2 = 0.0
+	__result_REAL__ = 0.0
 
-from LPPLexer import LPPLexer
-from LPPParser import LPPParser
+	def add(n1, n2):
+		result = 0
+		result = n1 + n2
+		return result
 
 
-class Test():
-    try:
-        lexer = LPPLexer()
 
-        def read_input(arg):
-            if len(sys.argv) > 1:
-                file_input = open(sys.argv[1], "r", encoding="utf8")
-                code = file_input.readlines()
-                return InputStream(''.join(code))
-            else:
-                return InputStream(input(">>> "))
+	def mult(r1, r2):
+		the__real_one = 0.0
+		the__real_one = r1 + r2
+		return the__real_one
 
-        tokens = CommonTokenStream(lexer)
-        parser = LPPParser(tokens)
-        tree = parser.programa()
 
-        print(str(tree(parser)))
+	sayHello = ""
+	sayhello = "hi folks :) "
+	print(sayhello)
 
-    except Exception as err:
-        print('Error (Test):' + err)
+	def introducemyself():
+		return "i'm a student"
+
+
+	_ = 20
+	_real2 = 9.5
+	__ = 7
+	my_real = 2.7
+	___ = add(_, __)
+	__result_real__ = mult(my_real, _real2)
+	print("the result of adding ", _, " and ", __, " is: ", ___)
+	print()
+
+	print("the result of multiplyin" + "g ", my_real, " a", 'n', "d ", _real2, " is: ", __result_real__)
+	print()
+
+	print()
+
+
+	print(introducemyself(), " that loves how to learn :3")
+
+
+if __name__ == "__main__":
+		main()

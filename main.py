@@ -4,7 +4,7 @@ from antlr4 import *
 
 from LPPLexer import LPPLexer
 from LPPParser import LPPParser
-from translate import Translate
+from Translate2 import Translate
 
 
 def read_input(arg):
