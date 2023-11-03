@@ -184,7 +184,7 @@ hasta
     ;
 
 repita
-    : REPITA sentencias HASTA expr
+    : REPITA sentencias hasta
     ;
 
 retorne
@@ -221,7 +221,7 @@ coma
     ;
 
 expr
-    : '(' expr ')'
+    : openPar expr closePar
     | literal
     | ID
     | expr punto
@@ -229,14 +229,8 @@ expr
     | funcionLibreriaEstandar '(' listaExpr? ')'
     | ID openPar listaExpr? closePar
     | '-' expr
-    //| NO expr
     | <assoc=right> expr exponente expr
     | expr exponente expr
-    //| expr ( '*' | '/' | DIV_ENTEROS | MOD ) expr
-    //| expr ( '+' | '-' ) expr
-    //| expr ( '=' | '<>' | '<=' | '>=' | '<' | '>' ) expr
-    //| expr OP_Y expr
-    //| expr OP_O expr
     ;
 
 openPar

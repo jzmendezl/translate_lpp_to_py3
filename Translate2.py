@@ -30,6 +30,11 @@ class Translate(LPPListener):
   in_para = False
   flag_hasta = False
   flag_arr = False
+  size_arr = ""
+  type_arr = ""
+  flag_reg = False
+  flag_repita = False
+  size_cad = 0
 
 
   def indentation(self):
@@ -55,58 +60,85 @@ class Translate(LPPListener):
     self.indent += 1
     self.prog += self.indentation() + "def __init__(self):\n"
     self.indent += 1
+    self.flag_reg = True
 
   def exitDeclaracionRegistro(self, ctx: LPPParser.DeclaracionRegistroContext):
     self.indent -= 1
     self.indent -= 1
     self.prog += "\n\n"
+    self.flag_reg = False
+
+  def enterTipo(self, ctx:LPPParser.TipoContext):
+    if ctx.getChild(0).getText().lower() == "arreglo":
+      self.flag_arr = True
+      self.size_arr += ctx.getChild(2).getText().lower() + ","
+      self.type_arr = ctx.getChild(5).getText().lower()
 
   def enterDeclaracionVariables(self, ctx:LPPParser.DeclaracionVariablesContext):
     if ctx.tipo().getChild(0).getText().lower() == "entero":
-      len_int = ctx.listaIDs().getText().split(',')
-      for i in range(0, len(len_int)):
-        self.prog += self.indentation() + ctx.listaIDs().getText().lower().split(',')[i] + " = 0\n"
+      if self.flag_reg:
+        len_int = ctx.listaIDs().getText().split(',')
+        for i in range(0, len(len_int)):
+          self.prog += self.indentation() + 'self.' + ctx.listaIDs().getText().lower().split(',')[i] + " = 0\n"
+      else:
+        len_int = ctx.listaIDs().getText().split(',')
+        for i in range(0, len(len_int)):
+          self.prog += self.indentation() + ctx.listaIDs().getText().lower().split(',')[i] + " = 0\n"
     elif ctx.tipo().getChild(0).getText().lower() == "real":
-      len_real = ctx.listaIDs().getText().split(',')
-      for i in range(0, len(len_real)):
-        self.prog += self.indentation() + ctx.listaIDs().getText().lower().split(',')[i] + " = 0.0\n"
+      if self.flag_reg:
+        len_real = ctx.listaIDs().getText().split(',')
+        for i in range(0, len(len_real)):
+          self.prog += self.indentation() + 'self.' + ctx.listaIDs().getText().lower().split(',')[i] + " = 0.0\n"
+      else:
+        len_real = ctx.listaIDs().getText().split(',')
+        for i in range(0, len(len_real)):
+          self.prog += self.indentation() + ctx.listaIDs().getText().lower().split(',')[i] + " = 0.0\n"
     elif ctx.tipo().getChild(0).getText().lower() == "booleano":
-      len_bool = ctx.listaIDs().getText().split(',')
-      for i in range(0, len(len_bool)):
-        self.prog += self.indentation() + ctx.listaIDs().getText().lower().split(',')[i] + " = False\n"
+      if self.flag_reg:
+        len_bool = ctx.listaIDs().getText().split(',')
+        for i in range(0, len(len_bool)):
+          self.prog += self.indentation() + 'self.' + ctx.listaIDs().getText().lower().split(',')[i] + " = False\n"
+      else:
+        len_bool = ctx.listaIDs().getText().split(',')
+        for i in range(0, len(len_bool)):
+          self.prog += self.indentation() + ctx.listaIDs().getText().lower().split(',')[i] + " = False\n"
     elif ctx.tipo().getChild(0).getText().lower() == "cadena":
-      len_cad = ctx.listaIDs().getText().split(',')
-      for i in range(0, len(len_cad)):
-        self.prog += self.indentation() + ctx.listaIDs().getText().lower().split(',')[i] + " = \"\"\n"
+      if self.flag_reg:
+        len_cad = ctx.listaIDs().getText().split(',')
+        for i in range(0, len(len_cad)):
+          self.prog += self.indentation() + 'self.' + ctx.listaIDs().getText().lower().split(',')[i] + " = \"\"\n"
+      else:
+        len_cad = ctx.listaIDs().getText().split(',')
+        for i in range(0, len(len_cad)):
+          self.prog += self.indentation() + ctx.listaIDs().getText().lower().split(',')[i] + " = \"\"\n"
     elif ctx.tipo().getChild(0).getText().lower() == "caracter":
-      len_car = ctx.listaIDs().getText().split(',')
-      for i in range(0, len(len_car)):
-        self.prog += self.indentation() + ctx.listaIDs().getText().lower().split(',')[i] + " = \"\"\n"
+      if self.flag_reg:
+        len_car = ctx.listaIDs().getText().split(',')
+        for i in range(0, len(len_car)):
+          self.prog += self.indentation() + 'self.' + ctx.listaIDs().getText().lower().split(',')[i] + " = \"\"\n"
+      else:
+        len_car = ctx.listaIDs().getText().split(',')
+        for i in range(0, len(len_car)):
+          self.prog += self.indentation() + ctx.listaIDs().getText().lower().split(',')[i] + " = \"\"\n"
     elif ctx.tipo().getChild(0).getText().lower() == "arreglo":
       self.flag_arr = True
-      print('ARR', ctx.getText())
-      size = ""
-
-      len_arr = ctx.getChild(0).getChild(2).getText()
-      list_len_arr = len_arr.split(',')
-      type_arr = ctx.getChild(0).getChild(5).getText()
-      if type_arr[:6] == "cadena":
-        type_arr = "cadena"
-      if len(list_len_arr) == 1:
-        self.prog += self.indentation() + f"{ctx.getChild(1).getText().lower()} = np.empty({list_len_arr[0]}, dtype={self.types.get(type_arr)})\n"
-      else:
-        if self.flag_arr:
-          for i in range(0, len(list_len_arr)):
-            size += list_len_arr[i] + ", "
-          print(size)
-        else:
-          self.prog += self.indentation() + f"{ctx.getChild(1).getText().lower()} = np.empty(({size}), dtype={self.types.get(type_arr)})\n"
     else:
-      self.prog += self.indentation() + ctx.listaIDs().getText().lower() + f" = {ctx.getChild(0).getText().lower()}()\n"
+      if self.flag_reg:
+        self.prog += self.indentation() + 'self.' + ctx.listaIDs().getText().lower() + f" = {ctx.getChild(0).getText().lower()}()\n"
+      else:
+        self.prog += self.indentation() + ctx.listaIDs().getText().lower() + f" = {ctx.getChild(0).getText().lower()}()\n"
+
 
   def exitDeclaracionVariables(self, ctx:LPPParser.DeclaracionVariablesContext):
-    if self.flag_arr:
+    if ctx.tipo().getChild(0).getText().lower() == "arreglo":
       self.flag_arr = False
+      if self.flag_arr:
+        pass
+      else:
+        self.prog += self.indentation() + f"{ctx.getChild(1).getText().lower()} = np.empty(({self.size_arr}), dtype={self.types.get(self.type_arr)})\n"
+        self.size_arr = ""
+        self.type_arr = ""
+
 
   def enterDeclaracionFuncion(self, ctx:LPPParser.DeclaracionFuncionContext):
     self.prog += "\n"
@@ -116,7 +148,6 @@ class Translate(LPPListener):
       self.prog += "():\n"
 
   def exitDeclaracionFuncion(self, ctx:LPPParser.DeclaracionFuncionContext):
-    self.indent -= 1
     self.prog += "\n\n"
 
   def enterParametros(self, ctx:LPPParser.ParametrosContext):
@@ -138,6 +169,7 @@ class Translate(LPPListener):
 
   def exitRetorne(self, ctx:LPPParser.RetorneContext):
     self.prog += "\n"
+    self.indent -= 1
 
   def enterExpr(self, ctx:LPPParser.ExprContext):
     if ctx.getChildCount() == 1:
@@ -150,6 +182,8 @@ class Translate(LPPListener):
     elif ctx.ID() != None:
       self.prog += ctx.ID().getText().lower()
 
+    elif ctx.RESTA() != None:
+      self.prog += ctx.RESTA().getText()
 
   def exitExpr(self, ctx:LPPParser.ExprContext):
     if self.in_para:
@@ -184,33 +218,28 @@ class Translate(LPPListener):
     self.prog += self.indentation() + "print("
 
   def exitEscriba(self, ctx:LPPParser.EscribaContext):
-    self.prog += ")\n"
+    self.prog += ", end=\"\", sep=\"\")\n"
 
   def enterLlamar(self, ctx:LPPParser.LlamarContext):
-    # print('LLAMAR', ctx.getText())
-    # if ctx.getText().lower() == "llamarnueva_linea":
-    #   self.prog += self.indentation() + "print(\"\\n\")\n"
-    #
-    # if ctx.ID() != None:
-    #   self.prog += ctx.ID().getText() + "("
-
     if ctx.procedimientoLibreriaEstandar() is not None:
       self.prog += self.indentation() + "print()\n"
     elif ctx.ID() is not None:
       if ctx.getChildCount() > 2:
-
-        self.prog += self.indentation() + f"{ctx.getChild(1).getText()}("
+        self.prog += self.indentation() + f"{ctx.getChild(1).getText().lower()}("
       else:
-        self.prog += self.indentation() + f"{ctx.getChild(1).getText()}()"
+        self.prog += self.indentation() + f"{ctx.getChild(1).getText().lower()}()"
 
   def exitLlamar(self, ctx:LPPParser.LlamarContext):
+    if ctx.ID() is not None:
+      if ctx.getChildCount() > 2:
+        self.prog += ")\n"
     self.prog += "\n"
 
   def enterComa(self, ctx:LPPParser.ComaContext):
     if self.in_asignar:
       self.prog += "]["
     else:
-      self.prog += ", "
+      self.prog += ","
 
   def enterOpenBra(self, ctx:LPPParser.OpenBraContext):
     self.prog += "["
@@ -234,6 +263,9 @@ class Translate(LPPListener):
     self.prog += self.indentation() + "else:\n"
     self.indent += 1
 
+  def exitSino(self, ctx:LPPParser.SinoContext):
+    self.indent -= 1
+
   def enterEntonces(self, ctx:LPPParser.EntoncesContext):
     self.prog += ":\n"
     self.indent += 1
@@ -244,14 +276,25 @@ class Translate(LPPListener):
     self.in_para = True
     self.flag_hasta = True
 
+  def exitPara(self, ctx:LPPParser.ParaContext):
+    self.indent -= 2
+    self.flag_hasta = False
+
   def enterHasta(self, ctx:LPPParser.HastaContext):
-    self.prog += ", "
-    # self.flag_hasta = True
+    if self.flag_repita:
+      self.prog += self.indentation() + "if ("
+    else:
+      self.prog += ", "
 
   def exitHasta(self, ctx:LPPParser.HastaContext):
-    if ctx.expr() is not None:
+    if self.flag_repita:
       self.prog += "):\n"
       self.indent += 1
+      self.prog += self.indentation() + "break\n"
+    else:
+      if ctx.expr() is not None:
+        self.prog += "):\n"
+        self.indent += 1
 
   def enterDeclaracionProcedimiento(self, ctx:LPPParser.DeclaracionProcedimientoContext):
     self.prog += "\n"
@@ -267,9 +310,22 @@ class Translate(LPPListener):
   def enterMientras(self, ctx:LPPParser.MientrasContext):
     self.prog += self.indentation() + "while "
 
+  def exitMientras(self, ctx:LPPParser.MientrasContext):
+    self.indent -= 1
+
   def enterHaga(self, ctx:LPPParser.HagaContext):
     self.prog += ":\n"
     self.indent += 1
+
+
+  def enterRepita(self, ctx:LPPParser.RepitaContext):
+    self.prog += self.indentation() + "while True:\n"
+    self.indent += 1
+    self.flag_repita = True
+
+  def exitRepita(self, ctx:LPPParser.RepitaContext):
+    self.indent -= 1
+    self.flag_repita = False
 
 
 
