@@ -168,11 +168,19 @@ casoSino
     ;
 
 mientras
-    : MIENTRAS expr HAGA sentencias FIN MIENTRAS
+    : MIENTRAS expr haga sentencias FIN MIENTRAS
+    ;
+
+haga
+    : HAGA
     ;
 
 para
-    : PARA expr '<-' expr HASTA expr  HAGA  sentencias FIN PARA
+    : PARA expr '<-' expr hasta HAGA  sentencias FIN PARA
+    ;
+
+hasta
+    : HASTA expr
     ;
 
 repita
