@@ -7,7 +7,7 @@ def main():
 	i = 0
 	acumulador = 0
 	while True:
-		print(("valor del acumulador en la iteracion: "),(acumulador), end="", sep="")
+		print(("Valor del acumulador en la iteracion: "),(acumulador), end="", sep="")
 		print()
 
 		i = i + 1

@@ -177,13 +177,17 @@ class Translate(LPPListener):
         self.prog += 'True'
       elif ctx.getText().lower() == 'falso':
         self.prog += 'False'
+      elif ctx.literal() != None:
+        self.prog += ctx.literal().getText()
       else:
         self.prog += ctx.getText().lower()
+    elif ctx.literal() != None:
+      self.prog += ctx.literal().getText()
     elif ctx.ID() != None:
       self.prog += ctx.ID().getText().lower()
-
     elif ctx.RESTA() != None:
       self.prog += ctx.RESTA().getText()
+
 
   def exitExpr(self, ctx:LPPParser.ExprContext):
     if self.in_para:
@@ -293,7 +297,7 @@ class Translate(LPPListener):
       self.prog += self.indentation() + "break\n"
     else:
       if ctx.expr() is not None:
-        self.prog += "):\n"
+        self.prog += " + 1):\n"
         self.indent += 1
 
   def enterDeclaracionProcedimiento(self, ctx:LPPParser.DeclaracionProcedimientoContext):
