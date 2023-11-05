@@ -32,6 +32,10 @@ Se identificaron dos posibles cambios que puedan surgir al ejecutar el script ob
 
 * Tener instalado el Plugin de ANTLR4 y ANTRL4 Tools, los cuales son muy utiles al momento de visualizar el arbol sintactico y ayuda a la creacion del codigo.
 
+* Marcar la carpeta "gen" como carpeta de tipo "Sources".
+
+* Indicar la version de Python a usar en el IDE.
+
 
 # Instalación
 
@@ -61,7 +65,7 @@ Si desea visualizar el arbol sintactico el el archivo de la gramatica `LPP.g4` u
 
 # Ejecucion del proyecto
 
-Para ejecutar este proyecto debe ejecutar el archivo `./main.py` en cual va a generar dos cosas.
+Para ejecutar este proyecto debe ejecutar el archivo `./main.py`, se debe especificar si el input sera un archivo de la carpeta ./input o sera entrada por consola, se van a generar dos cosas.
 
 * La primera es una salida en consola con la traducción obtenida a el lenguaje `Python`
 
@@ -73,4 +77,4 @@ Para ejecutar este proyecto debe ejecutar el archivo `./main.py` en cual va a ge
 
  * Joe Zafir Méndez León
  * Juan Diego
- * Juan Pablo
+ * Juan Pablo Garzon Parra
