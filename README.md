@@ -1,12 +1,12 @@
 # Traducctor de lenguaje LPP a Python Utilizando ANTLR4
 
-En este proyecto se toma como entrada un script en lenguaje ``LPP`` y se traduce a lenguaje ``Python3``, como observaciones a este proyecto se veran que las salidas pueden distar un poco de las originales de `LPP`, esto debido a las peculiaridades del lenguaje `Python`.
+En este proyecto se toma como entrada un script en lenguaje ``LPP`` y se traduce a lenguaje ``Python3``. Como observaciones a este proyecto se veran que las salidas pueden distar un poco de las originales de `LPP`, debido a las peculiaridades del lenguaje `Python`.
 
 ### Posibles cambios en la salida
 
 Se identificaron dos posibles cambios que puedan surgir al ejecutar el script obtenido al traducir de `LPP` a `Python`, estos son:
 
-* Al declarar un entero y utilizar una divición, el lenguaje automaticamente lo cambia a decimal, aunque este sea un entero.
+* Al declarar un entero y utilizar una división, el lenguaje automaticamente lo cambia a decimal, aunque este sea un entero.
 
   * ej. 
 `(2 / 4 = 2.0)`
