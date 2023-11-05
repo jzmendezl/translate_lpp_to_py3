@@ -1,6 +1,7 @@
 from LPPListener import LPPListener
 from LPPParser import LPPParser
 import re
+import sys
 
 class Translate(LPPListener):
   file = open("output.py", "w")
@@ -53,6 +54,9 @@ class Translate(LPPListener):
     self.prog += "if __name__ == \"__main__\":\n"
     self.indent += 1
     self.prog += self.indentation() + "main()\n"
+    output = open("output.py", "w")
+    output.write(self.prog)
+    output.close()
     print(self.prog)
 
   def enterDeclaracionRegistro(self, ctx:LPPParser.DeclaracionRegistroContext):
