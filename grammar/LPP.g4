@@ -30,7 +30,7 @@ declaracionFuncion
     ;
 
 parametros
-    : parametro ( ',' parametro )*
+    : parametro ( coma parametro )*
     ;
 
 parametro
@@ -103,7 +103,11 @@ lea
     ;
 
 asignar
-    : expr '<-' expr
+    : expr symbolAssing expr
+    ;
+
+symbolAssing
+    : '<-'
     ;
 
 llamar
@@ -126,7 +130,11 @@ procedimientoLibreriaEstandar
     ;
 
 si
-    : SI expr ENTONCES  sentencias sino? FIN SI
+    : SI expr entonces  sentencias sino? FIN SI
+    ;
+
+entonces
+    : ENTONCES
     ;
 
 sino
@@ -143,7 +151,7 @@ opcionCaso
     ;
 
 listaExprOpcion
-    : exprOpcion ( ',' exprOpcion ) *
+    : exprOpcion ( coma exprOpcion ) *
     ;
 
 exprOpcion
@@ -160,15 +168,23 @@ casoSino
     ;
 
 mientras
-    : MIENTRAS expr HAGA sentencias FIN MIENTRAS
+    : MIENTRAS expr haga sentencias FIN MIENTRAS
+    ;
+
+haga
+    : HAGA
     ;
 
 para
-    : PARA expr '<-' expr HASTA expr  HAGA  sentencias FIN PARA
+    : PARA expr '<-' expr hasta HAGA  sentencias FIN PARA
+    ;
+
+hasta
+    : HASTA expr
     ;
 
 repita
-    : REPITA sentencias HASTA expr
+    : REPITA sentencias hasta
     ;
 
 retorne
@@ -180,8 +196,8 @@ abrir
     ;
 
 acceso
-    : LECTURA ( ',' ESCRITURA )?
-    | ESCRITURA ( ',' LECTURA )?
+    : LECTURA ( coma ESCRITURA )?
+    | ESCRITURA ( coma LECTURA )?
     ;
 
 cerrar
@@ -189,33 +205,57 @@ cerrar
     ;
 
 escribir
-    : ESCRIBIR expr ',' listaExpr
+    : ESCRIBIR expr coma listaExpr
     ;
 
 leer
-    : LEER expr ',' listaExpr
+    : LEER expr coma listaExpr
     ;
 
 listaExpr
-    : expr ( ',' expr )*
+    : expr ( coma expr )*
+    ;
+
+coma
+    : ','
     ;
 
 expr
-    : '(' expr ')'
+    : openPar expr closePar
     | literal
     | ID
-    | expr '.' ID
-    | expr '[' listaExpr ']'
+    | expr punto
+    | expr openBra listaExpr closeBra
     | funcionLibreriaEstandar '(' listaExpr? ')'
-    | ID '(' listaExpr? ')'
+    | ID openPar listaExpr? closePar
     | '-' expr
-    | NO expr
-    |<assoc=right> expr '^' expr
-    | expr ( '*' | '/' | DIV_ENTEROS | MOD ) expr
-    | expr ( '+' | '-' ) expr
-    | expr ( '=' | '<>' | '<=' | '>=' | '<' | '>' ) expr
-    | expr OP_Y expr
-    | expr OP_O expr
+    | <assoc=right> expr exponente expr
+    | expr exponente expr
+    ;
+
+openPar
+    : '('
+    ;
+
+closePar
+    : ')'
+    ;
+
+openBra
+    : '['
+    ;
+
+closeBra
+    : ']'
+    ;
+
+exponente
+    : PODER
+    | '*' | '/' | DIV_ENTEROS | MOD | '+' | '-' | '=' | '<>' | '<=' | '>=' | '<' | '>' | OP_Y | OP_O | NO
+    ;
+
+punto
+    : '.' ID
     ;
 
 funcionLibreriaEstandar

@@ -197,6 +197,15 @@ class LPPListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by LPPParser#symbolAssing.
+    def enterSymbolAssing(self, ctx:LPPParser.SymbolAssingContext):
+        pass
+
+    # Exit a parse tree produced by LPPParser#symbolAssing.
+    def exitSymbolAssing(self, ctx:LPPParser.SymbolAssingContext):
+        pass
+
+
     # Enter a parse tree produced by LPPParser#llamar.
     def enterLlamar(self, ctx:LPPParser.LlamarContext):
         pass
@@ -221,6 +230,15 @@ class LPPListener(ParseTreeListener):
 
     # Exit a parse tree produced by LPPParser#si.
     def exitSi(self, ctx:LPPParser.SiContext):
+        pass
+
+
+    # Enter a parse tree produced by LPPParser#entonces.
+    def enterEntonces(self, ctx:LPPParser.EntoncesContext):
+        pass
+
+    # Exit a parse tree produced by LPPParser#entonces.
+    def exitEntonces(self, ctx:LPPParser.EntoncesContext):
         pass
 
 
@@ -296,12 +314,30 @@ class LPPListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by LPPParser#haga.
+    def enterHaga(self, ctx:LPPParser.HagaContext):
+        pass
+
+    # Exit a parse tree produced by LPPParser#haga.
+    def exitHaga(self, ctx:LPPParser.HagaContext):
+        pass
+
+
     # Enter a parse tree produced by LPPParser#para.
     def enterPara(self, ctx:LPPParser.ParaContext):
         pass
 
     # Exit a parse tree produced by LPPParser#para.
     def exitPara(self, ctx:LPPParser.ParaContext):
+        pass
+
+
+    # Enter a parse tree produced by LPPParser#hasta.
+    def enterHasta(self, ctx:LPPParser.HastaContext):
+        pass
+
+    # Exit a parse tree produced by LPPParser#hasta.
+    def exitHasta(self, ctx:LPPParser.HastaContext):
         pass
 
 
@@ -377,12 +413,75 @@ class LPPListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by LPPParser#coma.
+    def enterComa(self, ctx:LPPParser.ComaContext):
+        pass
+
+    # Exit a parse tree produced by LPPParser#coma.
+    def exitComa(self, ctx:LPPParser.ComaContext):
+        pass
+
+
     # Enter a parse tree produced by LPPParser#expr.
     def enterExpr(self, ctx:LPPParser.ExprContext):
         pass
 
     # Exit a parse tree produced by LPPParser#expr.
     def exitExpr(self, ctx:LPPParser.ExprContext):
+        pass
+
+
+    # Enter a parse tree produced by LPPParser#openPar.
+    def enterOpenPar(self, ctx:LPPParser.OpenParContext):
+        pass
+
+    # Exit a parse tree produced by LPPParser#openPar.
+    def exitOpenPar(self, ctx:LPPParser.OpenParContext):
+        pass
+
+
+    # Enter a parse tree produced by LPPParser#closePar.
+    def enterClosePar(self, ctx:LPPParser.CloseParContext):
+        pass
+
+    # Exit a parse tree produced by LPPParser#closePar.
+    def exitClosePar(self, ctx:LPPParser.CloseParContext):
+        pass
+
+
+    # Enter a parse tree produced by LPPParser#openBra.
+    def enterOpenBra(self, ctx:LPPParser.OpenBraContext):
+        pass
+
+    # Exit a parse tree produced by LPPParser#openBra.
+    def exitOpenBra(self, ctx:LPPParser.OpenBraContext):
+        pass
+
+
+    # Enter a parse tree produced by LPPParser#closeBra.
+    def enterCloseBra(self, ctx:LPPParser.CloseBraContext):
+        pass
+
+    # Exit a parse tree produced by LPPParser#closeBra.
+    def exitCloseBra(self, ctx:LPPParser.CloseBraContext):
+        pass
+
+
+    # Enter a parse tree produced by LPPParser#exponente.
+    def enterExponente(self, ctx:LPPParser.ExponenteContext):
+        pass
+
+    # Exit a parse tree produced by LPPParser#exponente.
+    def exitExponente(self, ctx:LPPParser.ExponenteContext):
+        pass
+
+
+    # Enter a parse tree produced by LPPParser#punto.
+    def enterPunto(self, ctx:LPPParser.PuntoContext):
+        pass
+
+    # Exit a parse tree produced by LPPParser#punto.
+    def exitPunto(self, ctx:LPPParser.PuntoContext):
         pass
 
 

@@ -114,6 +114,11 @@ class LPPVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by LPPParser#symbolAssing.
+    def visitSymbolAssing(self, ctx:LPPParser.SymbolAssingContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by LPPParser#llamar.
     def visitLlamar(self, ctx:LPPParser.LlamarContext):
         return self.visitChildren(ctx)
@@ -126,6 +131,11 @@ class LPPVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by LPPParser#si.
     def visitSi(self, ctx:LPPParser.SiContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LPPParser#entonces.
+    def visitEntonces(self, ctx:LPPParser.EntoncesContext):
         return self.visitChildren(ctx)
 
 
@@ -169,8 +179,18 @@ class LPPVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by LPPParser#haga.
+    def visitHaga(self, ctx:LPPParser.HagaContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by LPPParser#para.
     def visitPara(self, ctx:LPPParser.ParaContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LPPParser#hasta.
+    def visitHasta(self, ctx:LPPParser.HastaContext):
         return self.visitChildren(ctx)
 
 
@@ -214,8 +234,43 @@ class LPPVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by LPPParser#coma.
+    def visitComa(self, ctx:LPPParser.ComaContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by LPPParser#expr.
     def visitExpr(self, ctx:LPPParser.ExprContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LPPParser#openPar.
+    def visitOpenPar(self, ctx:LPPParser.OpenParContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LPPParser#closePar.
+    def visitClosePar(self, ctx:LPPParser.CloseParContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LPPParser#openBra.
+    def visitOpenBra(self, ctx:LPPParser.OpenBraContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LPPParser#closeBra.
+    def visitCloseBra(self, ctx:LPPParser.CloseBraContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LPPParser#exponente.
+    def visitExponente(self, ctx:LPPParser.ExponenteContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LPPParser#punto.
+    def visitPunto(self, ctx:LPPParser.PuntoContext):
         return self.visitChildren(ctx)
 
 
