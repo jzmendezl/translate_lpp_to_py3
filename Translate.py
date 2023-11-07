@@ -280,12 +280,11 @@ class Translate(LPPListener):
 
   def enterPara(self, ctx:LPPParser.ParaContext):
     self.prog += self.indentation() + "for "
-    self.indent += 1
     self.in_para = True
     self.flag_hasta = True
 
   def exitPara(self, ctx:LPPParser.ParaContext):
-    self.indent -= 2
+    self.indent -= 1
     self.flag_hasta = False
 
   def enterHasta(self, ctx:LPPParser.HastaContext):
