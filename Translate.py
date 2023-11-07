@@ -1,5 +1,5 @@
-from LPPListener import LPPListener
-from LPPParser import LPPParser
+from gen.LPPListener import LPPListener
+from gen.LPPParser import LPPParser
 import re
 import sys
 

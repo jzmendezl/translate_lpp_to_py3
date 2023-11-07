@@ -2,8 +2,8 @@ import sys
 
 from antlr4 import *
 
-from LPPLexer import LPPLexer
-from LPPParser import LPPParser
+from gen.LPPLexer import LPPLexer
+from gen.LPPParser import LPPParser
 from Translate import Translate
 
 
@@ -13,7 +13,8 @@ def read_input(arg):
         code = file_input.readlines()
         return InputStream(''.join(code))
     else:
-        return InputStream(input(">>> "))
+        code = sys.stdin.readlines()
+        return InputStream(''.join(code))
 
 def main():
     data = read_input(sys.argv)
